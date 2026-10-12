@@ -28,14 +28,14 @@ import { useAuth } from "./AuthProvider";
 import AuthModal from "./AuthModal";
 
 const NAV_ITEMS = [
-  { name: "Executive Briefing",  href: "/",           icon: BarChart3,   label: "Home" },
-  { name: "GCC Explorer",        href: "/explorer",   icon: Building2,   label: "2,117" },
-  { name: "TCO Calculator",      href: "/calculator", icon: Calculator,  label: "Stage 2" },
-  { name: "Setup Roadmap",       href: "/roadmap",    icon: CheckSquare, label: "6-Mo Plan" },
-  { name: "City Benchmarks",     href: "/cities",     icon: MapPin,      label: "10 cities" },
-  { name: "State Policies",      href: "/policies",   icon: FileCheck2,  label: "10 states" },
-  { name: "Salary Intelligence", href: "/salaries",   icon: Coins,       label: "Live" },
-  { name: "AI Setup Advisor",    href: "/advisor",    icon: Bot,         label: "Groq LLM", isAi: true },
+  { name: "Executive Briefing",  href: "/",           icon: BarChart3 },
+  { name: "GCC Explorer",        href: "/explorer",   icon: Building2 },
+  { name: "TCO Calculator",      href: "/calculator", icon: Calculator },
+  { name: "Setup Roadmap",       href: "/roadmap",    icon: CheckSquare },
+  { name: "City Benchmarks",     href: "/cities",     icon: MapPin },
+  { name: "State Policies",      href: "/policies",   icon: FileCheck2 },
+  { name: "Salary Intelligence", href: "/salaries",   icon: Coins },
+  { name: "AI Setup Advisor",    href: "/advisor",    icon: Bot, isAi: true },
 ];
 
 export default function SidebarLayout({ children }: { children: React.ReactNode }) {
@@ -256,17 +256,7 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
                   <Icon className="h-4 w-4 shrink-0" />
 
                   {!collapsed && (
-                    <div className="flex flex-1 items-center justify-between overflow-hidden">
-                      <span className="truncate">{item.name}</span>
-                      {item.label && (
-                        <span
-                          className="text-[9px] font-mono ml-2 shrink-0"
-                          style={{ color: "var(--text-tertiary)" }}
-                        >
-                          {item.label}
-                        </span>
-                      )}
-                    </div>
+                    <span className="truncate flex-1">{item.name}</span>
                   )}
 
                   {/* Tooltip on collapsed */}
