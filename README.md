@@ -9,6 +9,9 @@
 [![Supabase Auth](https://img.shields.io/badge/Auth-Supabase%20Auth-3ECF8E?style=flat&logo=supabase)](https://supabase.com/)
 [![Groq](https://img.shields.io/badge/AI%20Inference-Groq%20%2B%20Gemini-F55036?style=flat)](https://groq.com/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38B2AC?style=flat&logo=tailwind-css)](https://tailwindcss.com/)
+[![Deployment](https://img.shields.io/badge/Live%20Deployment-Vercel-000000?style=flat&logo=vercel)](https://gcc-compass-flexiple.vercel.app/)
+
+🌐 **Live Production Platform**: **[https://gcc-compass-flexiple.vercel.app/](https://gcc-compass-flexiple.vercel.app/)**
 
 ---
 
@@ -213,5 +216,6 @@ gcc-compass/
 
 * **Candidate**: Shah Kunj
 * **Application**: Flexiple Product Intern Assignment
+* **Live Deployment**: [https://gcc-compass-flexiple.vercel.app/](https://gcc-compass-flexiple.vercel.app/)
 * **Repository**: [https://github.com/Kunjshah06/gcc-compass-flexiple.git](https://github.com/Kunjshah06/gcc-compass-flexiple.git)
 * **Date**: October 2026
