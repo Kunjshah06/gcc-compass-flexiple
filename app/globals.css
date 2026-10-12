@@ -1,0 +1,259 @@
+@import "tailwindcss";
+
+/* ============================================================
+   GCC COMPASS — DESIGN SYSTEM
+   Palette: Dark & Light theme tokens
+   Philosophy: Editorial precision, tabular data-first
+   ============================================================ */
+
+/* ── Dark Theme (Default) ── */
+:root,
+html.dark {
+  --surface-base:    #09090b;   /* zinc-950 — page background */
+  --surface-1:       #111113;   /* cards, sidebar */
+  --surface-2:       #18181b;   /* elevated cards, inputs */
+  --surface-3:       #27272a;   /* hover states, active */
+  --border-subtle:   #27272a;   /* default borders */
+  --border-muted:    #3f3f46;   /* stronger borders */
+  --text-primary:    #fafafa;   /* headings, important */
+  --text-secondary:  #a1a1aa;   /* body, descriptions */
+  --text-tertiary:   #71717a;   /* timestamps, labels */
+  --accent:          #f59e0b;   /* amber-500 — primary accent */
+  --accent-dim:      #78350f;   /* amber-900 — muted accent bg */
+  --accent-border:   #b45309;   /* amber-700 — accent border */
+  --green:           #22c55e;   /* green-500 — positive/savings */
+  --green-dim:       #052e16;   /* positive bg */
+  --red:             #f87171;   /* red-400 — risk */
+  --red-dim:         #450a0a;   /* risk bg */
+  --blue:            #60a5fa;   /* blue-400 — links/info */
+  --chart-tooltip-bg:#18181b;
+  --prose-text:      #d4d4d8;
+  --prose-heading:   #fafafa;
+}
+
+/* ── Light Theme ── */
+html.light {
+  --surface-base:    #f8fafc;   /* slate-50 — page background */
+  --surface-1:       #ffffff;   /* clean white cards */
+  --surface-2:       #f1f5f9;   /* elevated cards, inputs */
+  --surface-3:       #e2e8f0;   /* hover states, active */
+  --border-subtle:   #e2e8f0;   /* clean subtle border */
+  --border-muted:    #cbd5e1;   /* distinct border */
+  --text-primary:    #0f172a;   /* slate-900 — high contrast text */
+  --text-secondary:  #475569;   /* slate-600 — readable body */
+  --text-tertiary:   #64748b;   /* slate-500 — metadata */
+  --accent:          #d97706;   /* amber-600 — high-contrast warm amber */
+  --accent-dim:      #fef3c7;   /* amber-100 — soft tint */
+  --accent-border:   #f59e0b;   /* amber-500 */
+  --green:           #16a34a;   /* green-600 */
+  --green-dim:       #dcfce7;   /* green-100 */
+  --red:             #dc2626;   /* red-600 */
+  --red-dim:         #fee2e2;   /* red-100 */
+  --blue:            #2563eb;   /* blue-600 */
+  --chart-tooltip-bg:#ffffff;
+  --prose-text:      #334155;
+  --prose-heading:   #0f172a;
+}
+
+@layer base {
+  * {
+    border-color: var(--border-subtle);
+  }
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--surface-base) !important;
+  color: var(--text-primary) !important;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum";
+  overflow-x: hidden;
+  letter-spacing: -0.01em;
+}
+
+/* ── Modern Circular Ripple View Transition ── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+  animation: theme-ripple 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes theme-ripple {
+  from {
+    clip-path: circle(0px at var(--theme-x, 50%) var(--theme-y, 50%));
+  }
+  to {
+    clip-path: circle(var(--theme-radius, 150vmax) at var(--theme-x, 50%) var(--theme-y, 50%));
+  }
+}
+
+/* ── Fallback Smooth Cross-Fade for legacy engines ── */
+html.theme-transitioning,
+html.theme-transitioning body {
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--surface-base); }
+::-webkit-scrollbar-thumb { background: var(--border-muted); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ── Range slider accent ── */
+input[type="range"] {
+  accent-color: var(--accent);
+}
+
+/* ── Focus visible custom ring ── */
+:focus-visible {
+  outline: none;
+}
+
+/* ── Stat number class ── */
+.stat-num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================
+   MARKDOWN PROSE — for AI chat responses
+   ============================================================ */
+.prose-custom {
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: var(--prose-text);
+}
+
+.prose-custom h1,
+.prose-custom h2,
+.prose-custom h3 {
+  color: var(--prose-heading);
+  font-weight: 700;
+  margin-top: 1.25rem;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+.prose-custom h2 {
+  font-size: 1rem;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0.3rem;
+}
+
+.prose-custom h3 {
+  font-size: 0.875rem;
+  color: var(--accent);
+}
+
+.prose-custom p {
+  margin-top: 0.35rem;
+  margin-bottom: 0.4rem;
+  color: var(--prose-text);
+}
+
+.prose-custom strong {
+  color: var(--prose-heading);
+  font-weight: 600;
+}
+
+.prose-custom em {
+  color: var(--text-secondary);
+}
+
+.prose-custom ul,
+.prose-custom ol {
+  margin-top: 0.35rem;
+  margin-bottom: 0.4rem;
+  padding-left: 1.15rem;
+}
+
+.prose-custom li {
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+  color: var(--prose-text);
+}
+
+.prose-custom table {
+  width: 100%;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.prose-custom th {
+  background-color: var(--surface-2);
+  color: var(--text-tertiary);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.65rem;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.prose-custom td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--prose-text);
+  background-color: var(--surface-1);
+}
+
+.prose-custom tr:last-child td {
+  border-bottom: none;
+}
+
+.prose-custom tr:hover td {
+  background-color: var(--surface-2);
+}
+
+.prose-custom blockquote {
+  border-left: 2px solid var(--accent);
+  background-color: rgba(245, 158, 11, 0.08);
+  padding: 0.5rem 0.75rem;
+  margin: 0.75rem 0;
+  border-radius: 0 4px 4px 0;
+  color: var(--prose-text);
+  font-style: normal;
+}
+
+.prose-custom code {
+  background-color: var(--surface-3);
+  color: var(--accent);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  font-family: ui-monospace, monospace;
+  border: 1px solid var(--border-subtle);
+}
+
+.prose-custom a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-custom hr {
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+  margin: 1rem 0;
+}
