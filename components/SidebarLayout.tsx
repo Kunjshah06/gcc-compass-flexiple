@@ -7,6 +7,7 @@ import {
   Compass,
   Building2,
   Calculator,
+  CheckSquare,
   FileCheck2,
   Coins,
   Bot,
@@ -18,13 +19,19 @@ import {
   MapPin,
   Sun,
   Moon,
+  LogIn,
+  LogOut,
+  User as UserIcon,
 } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
+import { useAuth } from "./AuthProvider";
+import AuthModal from "./AuthModal";
 
 const NAV_ITEMS = [
   { name: "Executive Briefing",  href: "/",           icon: BarChart3,   label: "Home" },
   { name: "GCC Explorer",        href: "/explorer",   icon: Building2,   label: "2,117" },
   { name: "TCO Calculator",      href: "/calculator", icon: Calculator,  label: "Stage 2" },
+  { name: "Setup Roadmap",       href: "/roadmap",    icon: CheckSquare, label: "6-Mo Plan" },
   { name: "City Benchmarks",     href: "/cities",     icon: MapPin,      label: "10 cities" },
   { name: "State Policies",      href: "/policies",   icon: FileCheck2,  label: "10 states" },
   { name: "Salary Intelligence", href: "/salaries",   icon: Coins,       label: "Live" },
@@ -35,7 +42,11 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+  const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
+  const [authMode, setAuthMode] = useState<"signin" | "signup">("signin");
+
   const { theme, toggleTheme } = useTheme();
+  const { user, signOut } = useAuth();
 
   useEffect(() => {
     setMobileOpen(false);
@@ -62,6 +73,40 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
         </Link>
 
         <div className="flex items-center gap-2">
+          {/* User Sign In / Profile */}
+          {user ? (
+            <button
+              onClick={() => signOut()}
+              suppressHydrationWarning
+              className="flex h-8 w-8 items-center justify-center rounded-md transition cursor-pointer"
+              style={{
+                backgroundColor: "rgba(34,197,94,0.12)",
+                color: "var(--green)",
+                border: "1px solid rgba(34,197,94,0.25)",
+              }}
+              title={`Signed in as ${user.email} (Click to Sign Out)`}
+            >
+              <UserIcon className="h-4 w-4" />
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setAuthMode("signin");
+                setAuthModalOpen(true);
+              }}
+              suppressHydrationWarning
+              className="flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-bold transition cursor-pointer"
+              style={{
+                backgroundColor: "var(--surface-2)",
+                color: "var(--accent)",
+                border: "1px solid var(--border-subtle)",
+              }}
+            >
+              <LogIn className="h-3 w-3" />
+              <span>Sign In</span>
+            </button>
+          )}
+
           <button
             onClick={(e) => toggleTheme(e)}
             suppressHydrationWarning
@@ -243,7 +288,7 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
           </nav>
         </div>
 
-        {/* Bottom — AI Advisor CTA & Theme Toggle */}
+        {/* Bottom — Theme Toggle & User Account */}
         <div className="p-3 space-y-2" style={{ borderTop: "1px solid var(--border-subtle)" }}>
           {/* Theme Toggle Button */}
           {!collapsed ? (
@@ -290,40 +335,90 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
             </button>
           )}
 
+          {/* User Sign In / Profile Status (Placed at very bottom) */}
           {!collapsed ? (
-            <Link
-              href="/advisor"
-              className="flex items-center gap-2 rounded-md px-3 py-2.5 text-[12px] font-semibold transition w-full"
-              style={{
-                backgroundColor: "rgba(245,158,11,0.1)",
-                color: "var(--accent)",
-                border: "1px solid rgba(245,158,11,0.25)",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(245,158,11,0.18)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(245,158,11,0.1)";
-              }}
-            >
-              <Bot className="h-3.5 w-3.5 shrink-0" />
-              <span>Launch AI Advisor</span>
-            </Link>
+            user ? (
+              <div
+                className="flex items-center justify-between rounded-md p-2"
+                style={{ backgroundColor: "var(--surface-2)", border: "1px solid var(--border-subtle)" }}
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <div
+                    className="flex h-6 w-6 items-center justify-center rounded-full shrink-0"
+                    style={{ backgroundColor: "rgba(34,197,94,0.15)", color: "var(--green)" }}
+                  >
+                    <UserIcon className="h-3 w-3" />
+                  </div>
+                  <div className="min-w-0">
+                    <span className="text-[11px] font-bold block truncate" style={{ color: "var(--text-primary)" }}>
+                      {user.user_metadata?.full_name || user.email?.split("@")[0] || "Executive"}
+                    </span>
+                    <span className="text-[9px] block truncate" style={{ color: "var(--text-tertiary)" }}>
+                      {user.email}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => signOut()}
+                  suppressHydrationWarning
+                  className="rounded p-1 transition cursor-pointer hover:bg-zinc-800"
+                  style={{ color: "var(--text-tertiary)" }}
+                  title="Sign Out"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => {
+                  setAuthMode("signin");
+                  setAuthModalOpen(true);
+                }}
+                suppressHydrationWarning
+                className="flex items-center justify-center gap-2 w-full rounded-md py-2 text-[11.5px] font-bold transition cursor-pointer"
+                style={{
+                  backgroundColor: "var(--surface-2)",
+                  color: "var(--accent)",
+                  border: "1px solid var(--border-subtle)",
+                }}
+              >
+                <LogIn className="h-3.5 w-3.5" />
+                <span>Executive Sign In</span>
+              </button>
+            )
           ) : (
-            <Link
-              href="/advisor"
-              className="flex h-10 w-10 items-center justify-center rounded-md transition mx-auto"
-              style={{ backgroundColor: "rgba(245,158,11,0.12)", color: "var(--accent)" }}
-              title="Launch AI Advisor"
-            >
-              <Bot className="h-4 w-4" />
-            </Link>
-          )}
-
-          {!collapsed && (
-            <p className="pt-1 text-[9.5px] leading-relaxed px-1" style={{ color: "var(--text-tertiary)" }}>
-              Verified FY2026 ground truth · NASSCOM-Zinnov
-            </p>
+            user ? (
+              <button
+                onClick={() => signOut()}
+                suppressHydrationWarning
+                className="flex h-9 w-9 items-center justify-center rounded-md transition mx-auto cursor-pointer"
+                style={{
+                  backgroundColor: "rgba(34,197,94,0.12)",
+                  color: "var(--green)",
+                  border: "1px solid rgba(34,197,94,0.25)",
+                }}
+                title={`Signed in as ${user.email} (Click to Sign Out)`}
+              >
+                <UserIcon className="h-4 w-4" />
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  setAuthMode("signin");
+                  setAuthModalOpen(true);
+                }}
+                suppressHydrationWarning
+                className="flex h-9 w-9 items-center justify-center rounded-md transition mx-auto cursor-pointer"
+                style={{
+                  backgroundColor: "var(--surface-2)",
+                  color: "var(--accent)",
+                  border: "1px solid var(--border-subtle)",
+                }}
+                title="Executive Sign In"
+              >
+                <LogIn className="h-4 w-4" />
+              </button>
+            )
           )}
         </div>
       </aside>
@@ -401,9 +496,14 @@ export default function SidebarLayout({ children }: { children: React.ReactNode 
         }`}
       >
         <div className="min-h-screen">{children}</div>
-
-
       </main>
+
+      {/* ── Supabase Auth Modal ── */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        defaultMode={authMode}
+      />
     </div>
   );
 }

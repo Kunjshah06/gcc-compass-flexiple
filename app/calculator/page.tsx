@@ -10,7 +10,9 @@ import {
   ArrowRight,
   Bot,
   Layers,
+  FileText,
 } from "lucide-react";
+import ExecutiveDossierModal from "@/components/ExecutiveDossierModal";
 import {
   ResponsiveContainer,
   BarChart,
@@ -65,6 +67,7 @@ export default function TCOCalculatorPage() {
   const [domainKey, setDomainKey] = useState<string>("ai-deeptech");
   const [workspaceType, setWorkspaceType] = useState<"managed" | "traditional">("managed");
   const [includeSubsidies, setIncludeSubsidies] = useState<boolean>(true);
+  const [isDossierOpen, setIsDossierOpen] = useState<boolean>(false);
 
   const selectedDomain = DOMAINS[domainKey];
 
@@ -143,24 +146,40 @@ export default function TCOCalculatorPage() {
       <div className="mx-auto max-w-7xl">
 
         {/* ── Header ── */}
-        <div className="max-w-3xl">
-          <div
-            className="inline-flex items-center gap-1.5 rounded px-3 py-1 text-[11px] font-semibold uppercase tracking-wider"
-            style={{ backgroundColor: "rgba(245,158,11,0.1)", color: "var(--accent)", border: "1px solid rgba(245,158,11,0.2)" }}
-          >
-            <Calculator className="h-3 w-3" />
-            Decision Engine · Stage 2 of 4
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div className="max-w-3xl">
+            <div
+              className="inline-flex items-center gap-1.5 rounded px-3 py-1 text-[11px] font-semibold uppercase tracking-wider"
+              style={{ backgroundColor: "rgba(245,158,11,0.1)", color: "var(--accent)", border: "1px solid rgba(245,158,11,0.2)" }}
+            >
+              <Calculator className="h-3 w-3" />
+              Decision Engine · Stage 2 of 4
+            </div>
+            <h1
+              className="mt-4 text-3xl font-black tracking-tight sm:text-5xl"
+              style={{ letterSpacing: "-0.03em" }}
+            >
+              GCC Total Cost of Ownership Calculator
+            </h1>
+            <p className="mt-2 text-[13px] max-w-2xl" style={{ color: "var(--text-secondary)" }}>
+              Simulate fully loaded 1-year operational costs across candidate Indian cities. Factors in
+              micro-market rents, role-specific engineering salaries, and state government cash subsidies.
+            </p>
           </div>
-          <h1
-            className="mt-4 text-3xl font-black tracking-tight sm:text-5xl"
-            style={{ letterSpacing: "-0.03em" }}
+
+          <button
+            type="button"
+            onClick={() => setIsDossierOpen(true)}
+            suppressHydrationWarning
+            className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-[12.5px] font-bold transition cursor-pointer hover:brightness-110 active:scale-95 shadow-md shrink-0 self-start md:self-end"
+            style={{
+              backgroundColor: "var(--accent)",
+              color: "#09090b",
+            }}
           >
-            GCC Total Cost of Ownership Calculator
-          </h1>
-          <p className="mt-2 text-[13px] max-w-2xl" style={{ color: "var(--text-secondary)" }}>
-            Simulate fully loaded 1-year operational costs across candidate Indian cities. Factors in
-            micro-market rents, role-specific engineering salaries, and state government cash subsidies.
-          </p>
+            <FileText className="h-4 w-4" />
+            <span>Generate Board Dossier (PDF)</span>
+          </button>
         </div>
 
         {/* ── Parameters Panel ── */}
@@ -199,6 +218,7 @@ export default function TCOCalculatorPage() {
                 step="10"
                 value={headcount}
                 onChange={(e) => setHeadcount(Number(e.target.value))}
+                suppressHydrationWarning
                 className="w-full cursor-pointer"
               />
               <div className="flex justify-between text-[9.5px] font-mono mt-1.5" style={{ color: "var(--text-tertiary)" }}>
@@ -217,6 +237,7 @@ export default function TCOCalculatorPage() {
               <select
                 value={domainKey}
                 onChange={(e) => setDomainKey(e.target.value)}
+                suppressHydrationWarning
                 className="w-full rounded-md px-3 py-2 text-[12px] font-medium outline-none cursor-pointer"
                 style={{
                   backgroundColor: "var(--surface-2)",
@@ -244,7 +265,8 @@ export default function TCOCalculatorPage() {
                     key={type}
                     type="button"
                     onClick={() => setWorkspaceType(type)}
-                    className="rounded-md px-3 py-2 text-[11.5px] font-semibold transition"
+                    suppressHydrationWarning
+                    className="rounded-md px-3 py-2 text-[11.5px] font-semibold transition cursor-pointer"
                     style={{
                       backgroundColor: workspaceType === type ? "rgba(245,158,11,0.12)" : "var(--surface-2)",
                       border: workspaceType === type ? "1px solid var(--accent)" : "1px solid var(--border-subtle)",
@@ -270,7 +292,8 @@ export default function TCOCalculatorPage() {
               <button
                 type="button"
                 onClick={() => setIncludeSubsidies(!includeSubsidies)}
-                className="w-full flex items-center justify-between rounded-md px-3 py-2.5 transition"
+                suppressHydrationWarning
+                className="w-full flex items-center justify-between rounded-md px-3 py-2.5 transition cursor-pointer"
                 style={{
                   backgroundColor: "var(--surface-2)",
                   border: "1px solid var(--border-subtle)",
@@ -363,11 +386,27 @@ export default function TCOCalculatorPage() {
 
         {/* ── Financial Table ── */}
         <div className="mt-6">
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="text-[13px] font-bold">Line-by-Line Financial Telemetry</h3>
-            <span className="stat-num text-[10.5px]" style={{ color: "var(--text-tertiary)" }}>
-              Converted at ₹84 / USD
-            </span>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <div>
+              <h3 className="text-[13px] font-bold">Line-by-Line Financial Telemetry</h3>
+              <span className="stat-num text-[10.5px]" style={{ color: "var(--text-tertiary)" }}>
+                Converted at ₹84 / USD
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsDossierOpen(true)}
+              suppressHydrationWarning
+              className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[11px] font-semibold transition cursor-pointer self-start sm:self-auto hover:border-amber-500/50"
+              style={{
+                backgroundColor: "var(--surface-2)",
+                border: "1px solid var(--border-subtle)",
+                color: "var(--accent)",
+              }}
+            >
+              <FileText className="h-3.5 w-3.5" />
+              <span>Export Board Investment Memo</span>
+            </button>
           </div>
 
           <div
@@ -468,17 +507,44 @@ export default function TCOCalculatorPage() {
               Generate a custom 24-week legal, real estate, and leadership hiring timeline for your board.
             </p>
           </div>
-          <Link
-            href="/advisor"
-            className="flex items-center gap-2 rounded-md px-5 py-2.5 text-[12.5px] font-bold shrink-0 transition self-start sm:self-auto"
-            style={{ backgroundColor: "var(--accent)", color: "#09090b" }}
-          >
-            <Bot className="h-4 w-4" />
-            Generate Blueprint
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0 self-start sm:self-auto">
+            <button
+              type="button"
+              onClick={() => setIsDossierOpen(true)}
+              suppressHydrationWarning
+              className="flex items-center gap-2 rounded-md px-4 py-2.5 text-[12.5px] font-bold transition cursor-pointer hover:brightness-110 active:scale-95"
+              style={{
+                backgroundColor: "var(--surface-3)",
+                color: "var(--text-primary)",
+                border: "1px solid var(--border-muted)",
+              }}
+            >
+              <FileText className="h-4 w-4 text-amber-500" />
+              <span>Board Dossier</span>
+            </button>
+            <Link
+              href="/advisor"
+              className="flex items-center gap-2 rounded-md px-5 py-2.5 text-[12.5px] font-bold transition"
+              style={{ backgroundColor: "var(--accent)", color: "#09090b" }}
+            >
+              <Bot className="h-4 w-4" />
+              <span>Generate Blueprint</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </div>
       </div>
+
+      {/* ── Executive Dossier Modal ── */}
+      <ExecutiveDossierModal
+        isOpen={isDossierOpen}
+        onClose={() => setIsDossierOpen(false)}
+        headcount={headcount}
+        domainName={selectedDomain.name}
+        workspaceType={workspaceType}
+        includeSubsidies={includeSubsidies}
+        results={results}
+      />
     </div>
   );
 }

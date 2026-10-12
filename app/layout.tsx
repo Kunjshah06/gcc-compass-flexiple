@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import SidebarLayout from "@/components/SidebarLayout";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { AuthProvider } from "@/components/AuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,9 +24,11 @@ export default function RootLayout({
         className={`${inter.className} min-h-screen antialiased`}
         style={{ backgroundColor: "var(--surface-base)", color: "var(--text-primary)" }}
       >
-        <ThemeProvider>
-          <SidebarLayout>{children}</SidebarLayout>
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <SidebarLayout>{children}</SidebarLayout>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );
